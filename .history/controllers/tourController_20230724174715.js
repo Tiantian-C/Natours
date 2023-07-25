@@ -1,42 +1,42 @@
-const Tour = require('./../models/tourModel');
-const APIFeatures = require('./../utils/apiFeatures');
+import { find, findById, create, findByIdAndUpdate, findByIdAndDelete, aggregate } from './../models/tourModel';
+import APIFeatures from './../utils/apiFeatures';
 
-exports.aliasTopTours = (req, res, next) => {
+export function aliasTopTours(req, res, next) {
   req.query.limit = '5';
   req.query.sort = '-ratingsAverage,price';
   req.query.fields = 'name,price,ratingAverage,summary,difficulty';
   next();
-};
+}
 
-exports.getAllTours = async (req, res) => {
+export async function getAllTours(req, res) {
   try {
     //EXCUTE THE QUERY
-    const features = new APIFeatures(Tour.find(), req.query)
+    const features = new APIFeatures(find(), req.query)
       .filter()
       .sort()
       .limitFields()
       .paginate();
     const tours = await features.query;
+
     //SEND RESPONSE
     res.status(200).json({
       status: 'success',
       results: tours.length,
       data: {
-        tours
+        tours,
       },
     });
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: err
+      message: err,
     });
   }
-  
-};
+}
 
-exports.getTour = async (req, res) => {
+export async function getTour(req, res) {
   try {
-    const tour = await Tour.findById(req.params.id);
+    const tour = await findById(req.params.id);
 
     res.status(200).json({
       status: 'success',
@@ -50,11 +50,11 @@ exports.getTour = async (req, res) => {
       message: err,
     });
   }
-};
+}
 
-exports.createTour = async (req, res) => {
+export async function createTour(req, res) {
   try {
-    const newTour = await Tour.create(req.body);
+    const newTour = await create(req.body);
 
     res.status(201).json({
       status: 'success',
@@ -66,11 +66,11 @@ exports.createTour = async (req, res) => {
       message: 'Invalid data sent!',
     });
   }
-};
+}
 
-exports.updateTour = async (req, res) => {
+export async function updateTour(req, res) {
   try {
-    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+    const tour = await findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
@@ -86,11 +86,11 @@ exports.updateTour = async (req, res) => {
       message: err,
     });
   }
-};
+}
 
-exports.deleteTour = async (req, res) => {
+export async function deleteTour(req, res) {
   try {
-    await Tour.findByIdAndDelete(req.params.id);
+    await findByIdAndDelete(req.params.id);
 
     res.status(204).json({
       status: 'success',
@@ -102,11 +102,11 @@ exports.deleteTour = async (req, res) => {
       message: err,
     });
   }
-};
+}
 
-exports.getTourStats = async (req, res) => {
+export async function getTourStats(req, res) {
   try {
-    const stats = await Tour.aggregate([
+    const stats = await aggregate([
       {
         $match: { ratingAverage: { $gte: 4.5 } },
       },
@@ -140,13 +140,13 @@ exports.getTourStats = async (req, res) => {
       message: err,
     });
   }
-};
+}
 
-exports.getMonthlyPlan = async (req, res) => {
+export async function getMonthlyPlan(req, res) {
   try {
     const year = req.params.year * 1; //2021
 
-    const plan = await Tour.aggregate([
+    const plan = await aggregate([
       {
         //have one document for each of the dates
         $unwind: '$startDates',
@@ -180,8 +180,8 @@ exports.getMonthlyPlan = async (req, res) => {
         $sort: { numTourStarts: -1 },
       },
       {
-        $limit: 12,
-      },
+        $limit:12
+      }
     ]);
 
     res.status(200).json({
@@ -196,4 +196,4 @@ exports.getMonthlyPlan = async (req, res) => {
       message: err,
     });
   }
-};
+}

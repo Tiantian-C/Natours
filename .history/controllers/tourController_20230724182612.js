@@ -30,7 +30,7 @@ exports.getAllTours = async (req, res) => {
       status: 'fail',
       message: err
     });
-  }
+  // }
   
 };
 

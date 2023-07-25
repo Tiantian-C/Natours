@@ -31,7 +31,6 @@ exports.getAllTours = async (req, res) => {
       message: err
     });
   }
-  
 };
 
 exports.getTour = async (req, res) => {

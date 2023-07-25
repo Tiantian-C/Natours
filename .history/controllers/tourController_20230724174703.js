@@ -1,4 +1,4 @@
-const Tour = require('./../models/tourModel');
+const Tour = re('./../models/tourModel');
 const APIFeatures = require('./../utils/apiFeatures');
 
 exports.aliasTopTours = (req, res, next) => {
@@ -17,21 +17,21 @@ exports.getAllTours = async (req, res) => {
       .limitFields()
       .paginate();
     const tours = await features.query;
+
     //SEND RESPONSE
     res.status(200).json({
       status: 'success',
       results: tours.length,
       data: {
-        tours
+        tours,
       },
     });
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: err
+      message: err,
     });
   }
-  
 };
 
 exports.getTour = async (req, res) => {
@@ -180,8 +180,8 @@ exports.getMonthlyPlan = async (req, res) => {
         $sort: { numTourStarts: -1 },
       },
       {
-        $limit: 12,
-      },
+        $limit:12
+      }
     ]);
 
     res.status(200).json({

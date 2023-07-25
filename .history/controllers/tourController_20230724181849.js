@@ -9,29 +9,22 @@ exports.aliasTopTours = (req, res, next) => {
 };
 
 exports.getAllTours = async (req, res) => {
+  // 
   try {
-    //EXCUTE THE QUERY
-    const features = new APIFeatures(Tour.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const tours = await features.query;
-    //SEND RESPONSE
+    const tours = await Tour.find();
     res.status(200).json({
       status: 'success',
       results: tours.length,
       data: {
-        tours
+        tours,
       },
     });
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: err
+      message: err,
     });
   }
-  
 };
 
 exports.getTour = async (req, res) => {
@@ -193,7 +186,7 @@ exports.getMonthlyPlan = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: err,
+      message: err
     });
   }
 };

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const tourSchema = new mongoose.Schema(
+const tourScheme = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -60,11 +60,11 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
-//virtual property
+//virtual properti
 tourSchema.virtual('durationWeeks').get(function () {
     return this.duration / 7;
 })
 
-const Tour = mongoose.model('Tour', tourSchema);
+const Tour = mongoose.model('Tour', tourScheme);
 
 module.exports = Tour;

@@ -9,29 +9,51 @@ exports.aliasTopTours = (req, res, next) => {
 };
 
 exports.getAllTours = async (req, res) => {
+  // try {
+  //   //EXCUTE THE QUERY
+  //   const features = new APIFeatures(Tour.find(), req.query)
+  //     .filter()
+  //     .sort()
+  //     .limitFields()
+  //     .paginate();
+  //   const tours = await features.query;
+  //   //SEND RESPONSE
+  //   res.status(200).json({
+  //     status: 'success',
+  //     results: tours.length,
+  //     data: {
+  //       tours
+  //     },
+  //   });
+  // } catch (err) {
+  //   res.status(404).json({
+  //     status: 'fail',
+  //     message: err
+  //   });
+  // }
   try {
-    //EXCUTE THE QUERY
+    // EXECUTE QUERY
     const features = new APIFeatures(Tour.find(), req.query)
       .filter()
       .sort()
       .limitFields()
       .paginate();
     const tours = await features.query;
-    //SEND RESPONSE
+
+    // SEND RESPONSE
     res.status(200).json({
       status: 'success',
       results: tours.length,
       data: {
-        tours
+        tours,
       },
     });
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: err
+      message: err,
     });
   }
-  
 };
 
 exports.getTour = async (req, res) => {

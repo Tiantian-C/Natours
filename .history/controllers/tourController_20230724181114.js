@@ -17,6 +17,7 @@ exports.getAllTours = async (req, res) => {
       .limitFields()
       .paginate();
     const tours = await features.query;
+
     //SEND RESPONSE
     res.status(200).json({
       status: 'success',
@@ -28,10 +29,9 @@ exports.getAllTours = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: err
+      message: err,
     });
   }
-  
 };
 
 exports.getTour = async (req, res) => {
@@ -193,7 +193,7 @@ exports.getMonthlyPlan = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: 'fail',
-      message: err,
+      message: err
     });
   }
 };
