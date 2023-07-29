@@ -64,7 +64,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
       10
     );
       console.log(changedTimestamp, JWTTimestamp);
-      return JWTTimestamp < changedTimestamp;//time the token was issued < the time change the password
+      return JWTTimestamp < changedTimestamp
   }
   //False means not change
   return false;

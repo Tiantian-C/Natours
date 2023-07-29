@@ -11,16 +11,12 @@ const signToken = (id) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-   const newUser = await User.create(
-     //req.body
-     {
-       name: req.body.name,
-       email: req.body.email,
-       password: req.body.password,
-       passwordConfirm: req.body.passwordConfirm,
-       passwordChangedAt: req.body.passwordChangedAt,
-     }
-   );
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+  });
 
   const token = signToken(newUser._id);
 
@@ -73,7 +69,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   //2)Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
   //console.log(decoded);
-
   //3)Check if ueser still exists
   const freshUser = await User.findById(decoded.id);
   if (!freshUser) {
@@ -89,6 +84,5 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   //GRANT ACCESS TO GRANTED ROUTE
-  req.user = freshUser;
   next();
 });
