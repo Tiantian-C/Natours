@@ -47,7 +47,7 @@ exports.getTour = catchAsync(async (req, res,next) => {
 });
 
 
-exports.createTour = factory.createOne(Tour);
+exports.createTour = 
 
 exports.updateTour = factory.updateOne(Tour);
 

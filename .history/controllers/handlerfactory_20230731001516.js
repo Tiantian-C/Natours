@@ -28,18 +28,7 @@ exports.updateOne = (Model) =>
     res.status(200).json({
       status: 'success',
       data: {
-        data: doc,
+        doc,
       },
-    });
-  });
-
-exports.createOne = (Model) =>
-  catchAsync(async (req, res, next) => {
-    const doc = await Model.create(req.body);
-    res.status(201).json({
-      status: 'success',
-      data: {
-        data:doc
-      }
     });
   });

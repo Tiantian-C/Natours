@@ -22,24 +22,13 @@ exports.updateOne = (Model) =>
       runValidators: true,
     });
 
-    if (!doc) {
-      return next(new AppError('No document found with that ID', 404));
+    if (!tour) {
+      return next(new AppError('No tour found with that ID', 404));
     }
     res.status(200).json({
       status: 'success',
       data: {
-        data: doc,
+        tour,
       },
-    });
-  });
-
-exports.createOne = (Model) =>
-  catchAsync(async (req, res, next) => {
-    const doc = await Model.create(req.body);
-    res.status(201).json({
-      status: 'success',
-      data: {
-        data:doc
-      }
     });
   });
