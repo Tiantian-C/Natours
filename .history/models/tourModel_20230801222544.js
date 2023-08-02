@@ -115,7 +115,7 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
-tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ price: 1, ratingAverage: -1 });
 tourSchema.index({ slug: 1 });
 
 //virtual property
@@ -159,7 +159,7 @@ tourSchema.pre(/^find/, function (next) {
 });
 
 tourSchema.post(/^find/, function (docs, next) {
-  //console.log(docs);
+  console.log(docs);
   next();
 });
 
