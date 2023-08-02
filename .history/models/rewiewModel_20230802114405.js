@@ -32,8 +32,7 @@ const reviewSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
-//each combination of tour and user has to be unique
-reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+reviewSchema.index({tour:1,user})
 
 reviewSchema.pre(/^find/, function (next) {
   // this.populate({
