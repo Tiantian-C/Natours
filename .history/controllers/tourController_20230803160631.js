@@ -4,6 +4,7 @@ const Tour = require('./../models/tourModel');
 const catchAsync = require('./../utils/catchAsync');
 const factory = require('./handlerFactory');
 
+
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = '-ratingsAverage,price';
@@ -21,7 +22,9 @@ exports.updateTour = factory.updateOne(Tour);
 
 exports.deleteTour = factory.deleteOne(Tour);
 
-exports.getTourStats = catchAsync(async (req, res, next) => {
+
+exports.getTourStats = catchAsync(async (req, res,next) => {
+  
   const stats = await Tour.aggregate([
     {
       $match: { ratingAverage: { $gte: 4.5 } },
@@ -52,7 +55,7 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
+exports.getMonthlyPlan = catchAsync(async (req, res,next) => {
   const year = req.params.year * 1; //2021
 
   const plan = await Tour.aggregate([
@@ -70,7 +73,7 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     },
     {
       $group: {
-        _id: { $month: '$startDates' }, //group by the stsrtdates of the tours
+        _id: { $month: '$startDates' },//group by the stsrtdates of the tours
         numTourStarts: { $sum: 1 },
         tours: { $push: '$name' },
       },
@@ -98,37 +101,18 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     data: {
       plan,
     },
-  });
+  })
 });
+
 
 // /tours-within/:distance/center/:latlng/unit/:uint
-// /tours-within/233/center/34.035980, -118.247777/unit/mi
-exports.getToursWithin = catchAsync(async (req, res, next) => {
+// /tours-distance?distance=233&center=-40,45&unit=mi
+// /tourrs-distance/233/center/-40,45/unit/mi
+exports.getToursWithin = (req, res, next) => {
   const { distance, latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');
-
-  const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
-
+  
   if (!lat || !lng) {
-    next(
-      new AppError(
-        'please provide latitude and longtitude in the format lat,lng.',
-        400
-      )
-    );
+    next(new AppError('please provide latitude and longtitude in the format lat,lng.'))
   }
-
-  const tours = await Tour.find({
-    startLocation: {
-      $geoWithin: { $centerSphere: [[lng, lat], radius] },
-    }
-  });
-
-  res.status(200).json({
-    status: 'success',
-    results: tours.length,
-    data: {
-      data: tours,
-    },
-  });
-});
+}
