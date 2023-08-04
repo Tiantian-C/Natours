@@ -156,21 +156,22 @@ exports.getDistances = catchAsync(async (req, res, next) => {
           coordinates: [lng * 1, lat * 1],
         },
         distanceField: 'distance',
-        distanceMultiplier: multiplier,
+        distanceMultiplier:
       },
     },
     {
       $project: {
         distance: 1,
-        name: 1,
-      },
-    },
+        name:1
+      }
+    }
+
   ]);
 
   res.status(200).json({
     status: 'success',
     data: {
-      data: distances,
+      data: distances
     },
   });
 });

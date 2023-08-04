@@ -33,8 +33,6 @@ router
 // /tourrs-distance/233/center/-40,45/unit/mi
 
 
-// /distances/:latlng/unit/:unit
-router.route('/distances/:latlng/unit/:unit').get(tourController.getDistances);
 
 router
   .route('/')
