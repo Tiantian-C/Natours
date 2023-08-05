@@ -1,0 +1,24 @@
+import '@babel/polyfill';
+import { displayMap } from './mapbox';
+import { login } from './login';
+
+
+//DOM ELEMENTS
+const mapBox = document.getElementById('map');
+
+//VALUES
+
+//DELEGATION
+if (mapbox) {
+    const locations = JSON.parse(
+      mapBox.dataset.locations
+    );
+    displayMap(locations);
+}
+
+
+document.querySelector('.form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  
+  login(email, password);
+});
