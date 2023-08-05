@@ -8,7 +8,7 @@ mapboxgl.accessToken =
 var map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/youknowwholalala/clkx91o3n002u01pu8bjncc3j',
-  scrollZoom:false
+  
 });
 
 const bounds = new mapboxgl.LngLatBounds();
@@ -41,7 +41,7 @@ locations.forEach((loc) => {
 map.fitBounds(bounds, {
   padding: {
     top: 200,
-    bottom: 150,
+    bottom: ,
     left: 100,
     right: 100,
   },
