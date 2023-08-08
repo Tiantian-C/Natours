@@ -40,12 +40,12 @@ const sendErrorDev = (err, req, res) => {
     });
   }
   //RENDERED WEBSITE
-  console.error('ERROR-----', err);
   return res.status(err.statusCode).render('error', {
     title: 'Something went wrong!',
     msg: err.message,
   });
 };
+
 
 const sendErrorProd = (err, req, res) => {
   //API
@@ -67,23 +67,23 @@ const sendErrorProd = (err, req, res) => {
       message: 'Something went very wrong!',
     });
   }
-
   //RENDERED WEBSITE
   if (err.isOperational) {
-    return res.status(err.statusCode).render('error', {
+    res.status(err.statusCode).render('error', {
       title: 'Something went wrong!',
-      msg: err.message,
+      msg: 'Please try again later.',
+    });
+    //programming or other unknown error:don"t leak details
+  } else {
+    //1) log err
+    console.error('ERROR-----', err);
+
+    //2) send a generic message
+    res.status(500).json({
+      status: 'error',
+      message: 'Something went very wrong!',
     });
   }
-  //programming or other unknown error:don"t leak details
-  //1) log err
-  console.error('ERROR-----', err);
-
-  //2) send a generic message
-  return res.status(500).json({
-    status: 'error',
-    message:'Please try again later.'
-  });
 };
 
 module.exports = (err, req, res, next) => {
@@ -94,7 +94,6 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
-    error.message = err.message;
     if (err.name === 'CastError') error = handleCastErrorDB(error);
     if (err.code === 11000) error = handleDuplicateFieldsDB(error);
     if (err.name === 'ValidationError') error = handleValidationErrorDB(error);
