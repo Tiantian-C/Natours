@@ -15,11 +15,5 @@ router
   .get(bookingController.getAllBooking)
   .post(bookingController.createBooking);
 
-router
-  .route('/:id')
-  .get(bookingController.getBooking)
-  .patch(bookingController.updateBooking)
-  .delete(bookingController.deleteBooking);
-
-  
+router.route('/:id').get(bookingController.getBooking).patch()
 module.exports = router;
