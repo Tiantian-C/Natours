@@ -1,11 +1,11 @@
 const nodemailer = require('nodemailer');
 const pug = require('pug');
-const { convert } = require('html-to-text');
+const {convert} = require('html-to-text');
 
 //new Email(user, url).sendWelcome();
 
 module.exports = class Email {
-  constructor(user, url) {
+  constructor(user,url) {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
@@ -33,7 +33,7 @@ module.exports = class Email {
     const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
       firstName: this.firstName,
       url: this.url,
-      subject,
+      subject
     });
 
     //2)Define email options
@@ -42,11 +42,11 @@ module.exports = class Email {
       to: this.to,
       subject,
       html,
-      text: convert(html),
+      text: convert(html)
     };
 
     //3)Create a transport and send email
-    await this.newTransport().sendMail(mailOptions);
+    await this.newTransport().sendMail(mailOptions);;
   }
 
   async sendWelcome() {
@@ -54,9 +54,10 @@ module.exports = class Email {
   }
 
   async sendPasswordReset() {
-    await this.send(
-      'passwordReset',
-      'Your password reset token(valid for only 10 minutes)'
-    );
+    await this.send('passwordReset',)
   }
 };
+
+
+
+

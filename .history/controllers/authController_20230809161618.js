@@ -33,6 +33,8 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
+
+
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
 
@@ -41,6 +43,8 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   createSendToken(newUser, 201, res);
 });
+
+
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -60,6 +64,8 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+
+
 exports.logout = (req, res) => {
   res.cookie('jwt', 'logged out', {
     expires: new Date(Date.now() + 10 * 1000),
@@ -69,6 +75,9 @@ exports.logout = (req, res) => {
     status: 'success',
   });
 };
+
+
+
 
 exports.protect = catchAsync(async (req, res, next) => {
   //1) Gettting token and check if it's there
@@ -105,9 +114,12 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //GRANT ACCESS TO GRANTED ROUTE
   req.user = freshUser; //put the user to the req Object
-  res.locals.user = freshUser;
+  res.locals.user = freshUser; 
   next();
 });
+
+
+
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
@@ -122,6 +134,8 @@ exports.restrictTo = (...roles) => {
   };
 };
 
+
+
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   //1)Get user based on Posted email
   const user = await User.findOne({ email: req.body.email });
@@ -134,12 +148,9 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   //3)Send it to user's email
+  
 
   try {
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/users/resetPassword/${resetToken}`;
-    
     await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({
@@ -159,6 +170,9 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     );
   }
 });
+
+
+
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
   //1) get user based on the token
@@ -187,6 +201,9 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   createSendToken(newUser, 200, res);
 });
 
+
+
+
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
@@ -205,6 +222,9 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 4) Log user in, send JWT
   createSendToken(user, 200, res);
 });
+
+
+
 
 // Only for rendered pages,no errors!
 exports.isLoggedIn = async (req, res, next) => {

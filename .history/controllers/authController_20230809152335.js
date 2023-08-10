@@ -33,6 +33,8 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
+
+
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
 
@@ -41,6 +43,8 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   createSendToken(newUser, 201, res);
 });
+
+
 
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
@@ -105,7 +109,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //GRANT ACCESS TO GRANTED ROUTE
   req.user = freshUser; //put the user to the req Object
-  res.locals.user = freshUser;
+  res.locals.user = freshUser; 
   next();
 });
 
@@ -134,13 +138,18 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   //3)Send it to user's email
+  const resetURL = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/users/resetPassword/${resetToken}`;
 
+  const message = `Forgot your password? Submit a PATCH request with your new password 
+  and passwordConfirm to:${resetURL}.\nIf you didn't forget your password,please ignore this email!`;
   try {
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/users/resetPassword/${resetToken}`;
-    
-    await new Email(user, resetURL).sendPasswordReset();
+    // await sendEmail({
+    //   email: user.email,
+    //   suject: 'Your password reset token (valid for 10 min)',
+    //   message,
+    // });
 
     res.status(200).json({
       status: 'success',
